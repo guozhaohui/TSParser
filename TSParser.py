@@ -10,9 +10,9 @@
 """
 import sys
 import struct
-#import Tkinter
-#import tkMessageBox
-#import tkFileDialog
+import Tkinter
+import tkMessageBox
+import tkFileDialog
 import sys
 from optparse import OptionParser
 
@@ -518,11 +518,11 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
 
 
 def getFilename():
-#    root=Tkinter.Tk()
-#    fTyp=[('.ts File','*.ts'),('.TOD File','*.TOD'),('.trp File','*.trp'),('All Files','*.*')]
-#    iDir='C:/'
-#    filename=tkFileDialog.askopenfilename(filetypes=fTyp,initialdir=iDir)
-#    root.destroy()
+    root=Tkinter.Tk()
+    fTyp=[('.ts File','*.ts'),('.TOD File','*.TOD'),('.trp File','*.trp'),('All Files','*.*')]
+    iDir='C:/'
+    filename=tkFileDialog.askopenfilename(filetypes=fTyp,initialdir=iDir)
+    root.destroy()
     return filename;
 
 def Main():
