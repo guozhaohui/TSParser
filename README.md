@@ -50,7 +50,6 @@ Three types of packet size (188 bytes,192 bytes, 204 bytes) TS stream can be han
 * --unique  
       Output unique PAT/PMT/SIT packets Information.default, only the first one is output.
 
-##AUTHOR
-
-   guo.zhaohui@gmail.com
+##AUTHOR  
+     guo.zhaohui@gmail.com
 
