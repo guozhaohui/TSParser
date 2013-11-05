@@ -520,7 +520,7 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
 def getFilename():
     root=Tkinter.Tk()
     fTyp=[('.ts File','*.ts'),('.TOD File','*.TOD'),('.trp File','*.trp'),('All Files','*.*')]
-    iDir='C:/'
+    iDir='~/'
     filename=tkFileDialog.askopenfilename(filetypes=fTyp,initialdir=iDir)
     root.destroy()
     return filename;
@@ -558,7 +558,7 @@ def Main():
 
     if ((opts.searchItem == "FFF") & (opts.mode != "PAT") & (len(args) < 2)):
         cml_parser.print_help()
-    return
+        return
 
     if ((opts.searchItem == "FFF") & (opts.mode != "PAT")):
         pid = int(args[1], 16)
