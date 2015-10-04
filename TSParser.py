@@ -577,11 +577,11 @@ def Main():
 
     if (opts.filename == ""):
         filename = getFilename()
+    else:
+        filename = opts.filename
     
     if (filename == ""):
         return
-    else:
-        filename = opts.filename
 
     print filename
     filehandle = open(filename,'rb')
