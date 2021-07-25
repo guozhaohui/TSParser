@@ -1,8 +1,8 @@
-#TSParser
+# TSParser
 
 TSParser is a Python script used to parse MPEG-2 TS stream.
 
-##DESCRIPTION
+## DESCRIPTION
 
 
 You can retrieve the following information by this script.
@@ -20,7 +20,7 @@ For ES packet, the PES ( Packetized Elementary Stream) header is also printed ou
 
 Three types of packet size (188 bytes,192 bytes, 204 bytes) TS stream can be handled by this script. 
 
-##USAGE
+## USAGE
 
  TSParser.py -t <188|192|204> -m PAT    
  TSParser.py -t <188|192|204> -m <PMT|ES|SIT> PID    
@@ -30,7 +30,7 @@ Three types of packet size (188 bytes,192 bytes, 204 bytes) TS stream can be han
 
  Example: TSParser.py -t 188 -m PMT 1fc8
 
-###Options:
+### Options:
 
 * -h, --help  
       Show this help message and exit.
@@ -50,6 +50,6 @@ Three types of packet size (188 bytes,192 bytes, 204 bytes) TS stream can be han
 * --unique  
       Output unique PAT/PMT/SIT packets Information.default, only the first one is output.
 
-##AUTHOR  
+## AUTHOR  
       guo.zhaohui@gmail.com
 
