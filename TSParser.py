@@ -4,15 +4,15 @@
 #this Python script is used to parse MPEG-2 TS stream
 #
 #Author: Zhaohui Guo (guo.zhaohui@gmail.com)
-#Copyright(c)2012 Zhaohui GUO
+#Copyright(c)2022 Zhaohui GUO
 
 """this script is used to parse MPEG-2 TS stream.
 """
 import sys
 import struct
-import Tkinter
-import tkMessageBox
-import tkFileDialog
+import tkinter
+import tkinter.messagebox
+import tkinter.filedialog
 import sys
 from optparse import OptionParser
 
@@ -165,12 +165,12 @@ def parsePATSection(filehandle, k):
     local = readFile(filehandle,k,4)
     table_id = (local>>24)
     if (table_id != 0x0):
-        print 'Ooops! error in parsePATSection()!'
+        print('Ooops! error in parsePATSection()!')
         return
 
-    print '------- PAT Information -------'
+    print('------- PAT Information -------')
     section_length = (local>>8)&0xFFF
-    print 'section_length = %d' %section_length
+    print('section_length = %d' %section_length)
 
     transport_stream_id = (local&0xFF) << 8;
     local = readFile(filehandle, k+4, 4)
@@ -180,7 +180,7 @@ def parsePATSection(filehandle, k):
     current_next_indicator = (local>>16)&0x1
     section_number = (local>>8)&0xFF
     last_section_number = local&0xFF;
-    print 'section_number = %d, last_section_number = %d' %(section_number, last_section_number)
+    print('section_number = %d, last_section_number = %d' %(section_number, last_section_number))
 
     length = section_length - 4 - 5
     j = k + 8
@@ -189,15 +189,15 @@ def parsePATSection(filehandle, k):
         local = readFile(filehandle, j, 4)
         program_number = (local >> 16)
         program_map_PID = local & 0x1FFF
-        print 'program_number = 0x%X' %program_number
+        print('program_number = 0x%X' %program_number)
         if (program_number == 0):
-            print 'network_PID = 0x%X' %program_map_PID
+            print('network_PID = 0x%X' %program_map_PID)
         else:
-            print 'program_map_PID = 0x%X' %program_map_PID
+            print('program_map_PID = 0x%X' %program_map_PID)
         length = length - 4;
         j += 4
         
-        print ''
+        print('')
 
 def parsePMTSection(filehandle, k):
 
@@ -205,40 +205,40 @@ def parsePMTSection(filehandle, k):
 
     table_id = (local>>24)
     if (table_id != 0x2):
-        print 'Ooops! error in parsePATSection()!'
+        print('Ooops! error in parsePATSection()!')
         return
 
-    print '------- PMT Information -------'
+    print('------- PMT Information -------')
 
     section_length = (local>>8)&0xFFF
-    print 'section_length = %d' %section_length
+    print('section_length = %d' %section_length)
 
     program_number = (local&0xFF) << 8;
 
     local = readFile(filehandle, k+4, 4)
 
     program_number += (local>>24)&0xFF
-    print 'program_number = %d' %program_number
+    print('program_number = %d' %program_number)
 
     version_number = (local>>17)&0x1F
     current_next_indicator = (local>>16)&0x1
     section_number = (local>>8)&0xFF
     last_section_number = local&0xFF;
-    print 'section_number = %d, last_section_number = %d' %(section_number, last_section_number)
+    print('section_number = %d, last_section_number = %d' %(section_number, last_section_number))
 
     local = readFile(filehandle, k+8, 4)
 
     PCR_PID = (local>>16)&0x1FFF
-    print 'PCR_PID = 0x%X' %PCR_PID
+    print('PCR_PID = 0x%X' %PCR_PID)
     program_info_length = (local&0xFFF)
-    print 'program_info_length = %d' %program_info_length
+    print('program_info_length = %d' %program_info_length)
 
     n = program_info_length
     m = k + 12;
     while (n>0):
         descriptor_tag = readFile(filehandle, m, 1)
         descriptor_length = readFile(filehandle, m+1, 1)
-        print 'descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length)
+        print('descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length))
         n -= descriptor_length + 2
         m += descriptor_length + 2
 
@@ -253,13 +253,13 @@ def parsePMTSection(filehandle, k):
         elementary_PID = (local2>>16)&0x1FFF
         ES_info_length = local2&0xFFF
 
-        print 'stream_type = 0x%X, elementary_PID = 0x%X, ES_info_length = %d' %(stream_type, elementary_PID, ES_info_length)
+        print('stream_type = 0x%X, elementary_PID = 0x%X, ES_info_length = %d' %(stream_type, elementary_PID, ES_info_length))
         n = ES_info_length
         m = j+5;
         while (n>0):
             descriptor_tag = readFile(filehandle, m, 1)
             descriptor_length = readFile(filehandle, m+1, 1)
-            print 'descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length)
+            print('descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length))
             n -= descriptor_length + 2
             m += descriptor_length + 2
 
@@ -267,35 +267,35 @@ def parsePMTSection(filehandle, k):
         j += 5 + ES_info_length
         length -= 5 + ES_info_length
 
-    print ''
+    print('')
 
 def parseSITSection(filehandle, k):
     local = readFile(filehandle,k,4)
 
     table_id = (local>>24)
     if (table_id != 0x7F):
-        print 'Ooops! error in parseSITSection()!'
+        print('Ooops! error in parseSITSection()!')
         return
 
-    print '------- SIT Information -------'
+    print('------- SIT Information -------')
 
     section_length = (local>>8)&0xFFF
-    print 'section_length = %d' %section_length
+    print('section_length = %d' %section_length)
     local = readFile(filehandle, k+4, 4)
 
     section_number = (local>>8)&0xFF
     last_section_number = local&0xFF;
-    print 'section_number = %d, last_section_number = %d' %(section_number, last_section_number)
+    print('section_number = %d, last_section_number = %d' %(section_number, last_section_number))
     local = readFile(filehandle, k+8, 2)
     transmission_info_loop_length = local&0xFFF
-    print 'transmission_info_loop_length = %d' %transmission_info_loop_length
+    print('transmission_info_loop_length = %d' %transmission_info_loop_length)
 
     n = transmission_info_loop_length
     m = k + 10;
     while (n>0):
         descriptor_tag = readFile(filehandle, m, 1)
         descriptor_length = readFile(filehandle, m+1, 1)
-        print 'descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length)
+        print('descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length))
         n -= descriptor_length + 2
         m += descriptor_length + 2
 
@@ -306,20 +306,20 @@ def parseSITSection(filehandle, k):
         local1 = readFile(filehandle, j, 4)
         service_id = (local1>>16)&0xFFFF;
         service_loop_length = local1&0xFFF
-        print 'service_id = %d, service_loop_length = %d' %(service_id, service_loop_length)
+        print('service_id = %d, service_loop_length = %d' %(service_id, service_loop_length))
 
         n = service_loop_length
         m = j+4;
         while (n>0):
             descriptor_tag = readFile(filehandle, m, 1)
             descriptor_length = readFile(filehandle, m+1, 1)
-            print 'descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length)
+            print('descriptor_tag = %d, descriptor_length = %d' %(descriptor_tag, descriptor_length))
             n -= descriptor_length + 2
             m += descriptor_length + 2
 
         j += 4 + service_loop_length
         length -= 4 + service_loop_length
-    print ''
+    print('')
 
 def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
 
@@ -355,7 +355,7 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
 
             syncByte = (PacketHeader>>24)
             if (syncByte != 0x47):
-                print 'Ooops! Can NOT found Sync_Byte! maybe something wrong with the file'
+                print('Ooops! Can NOT found Sync_Byte! maybe something wrong with the file')
                 break
 
             payload_unit_start_indicator = (PacketHeader>>22)&0x1
@@ -377,8 +377,8 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
                     if (((flags>>7)&0x1)):
                         discontinuity = 'discontinuity: true'
 
-                    print 'PCR packet, packet No. %d, PID = 0x%x, PCR_base = hi:0x%X lo:0x%X PCR_ext = 0x%X %s' \
-                    %(packetCount, PID, PCR.PCR_base_hi, PCR.PCR_base_lo, PCR.PCR_extension, discontinuity)
+                    print('PCR packet, packet No. %d, PID = 0x%x, PCR_base = hi:0x%X lo:0x%X PCR_ext = 0x%X %s' \
+                    %(packetCount, PID, PCR.PCR_base_hi, PCR.PCR_base_lo, PCR.PCR_extension, discontinuity))
 
             if (adaptation_fieldc_trl == 0x1)|(adaptation_fieldc_trl == 0x3):
 
@@ -389,24 +389,24 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
 
                     parsePESHeader(filehandle, n+Adaptation_Field_Length+4, PESPktInfo)
                     PTS_MSB24 = ((PESPktInfo.PTS_hi&0x1)<<23)|((PESPktInfo.PTS_lo>>9)&0x7FFFFF)
-                    print 'PES start, packet No. %d, PID = 0x%x, PTS_MSB24 = 0x%x PTS_hi = 0x%X, PTS_low = 0x%X' \
-                    %(packetCount, PID, PTS_MSB24, PESPktInfo.PTS_hi, PESPktInfo.PTS_lo)
+                    print('PES start, packet No. %d, PID = 0x%x, PTS_MSB24 = 0x%x PTS_hi = 0x%X, PTS_low = 0x%X' \
+                    %(packetCount, PID, PTS_MSB24, PESPktInfo.PTS_hi, PESPktInfo.PTS_lo))
 
                     if (mode == 'ES'):
-                        print 'packet No. %d,  ES PID = 0x%X,  Steam_ID = 0x%X,  AU_Type = %s' \
-                        %(packetCount, PID, PESPktInfo.getStreamID(), PESPktInfo.getAUType())
+                        print('packet No. %d,  ES PID = 0x%X,  Steam_ID = 0x%X,  AU_Type = %s' \
+                        %(packetCount, PID, PESPktInfo.getStreamID(), PESPktInfo.getAUType()))
 
                         if (idr_flag == True):
                             EntryPESPacketNumList.append(last_SameES_packetNo - last_EntryTPI +1)
-                            print 'packet No. %d, ES PID = 0x%X, Steam_ID = 0x%X, AU_Type = %s' \
-                            %(packetCount, PID, PESPktInfo.getStreamID(), PESPktInfo.getAUType())
+                            print('packet No. %d, ES PID = 0x%X, Steam_ID = 0x%X, AU_Type = %s' \
+                            %(packetCount, PID, PESPktInfo.getStreamID(), PESPktInfo.getAUType()))
 
 
                         if (PESPktInfo.getAUType() == "IDR_picture"):
                             idr_flag = True
                             last_EntryTPI = packetCount
-                            print 'packet No. %d, ES PID = 0x%X, Steam_ID = 0x%X, AU_Type = %s' \
-                            %(packetCount, PID, PESPktInfo.getStreamID(), PESPktInfo.getAUType())
+                            print('packet No. %d, ES PID = 0x%X, Steam_ID = 0x%X, AU_Type = %s' \
+                            %(packetCount, PID, PESPktInfo.getStreamID(), PESPktInfo.getAUType()))
                             TPIList.append(packetCount)
                             PTSList.append(PTS_MSB24)
                         else:
@@ -419,7 +419,7 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
                     table_id = readFile(filehandle,n+Adaptation_Field_Length+4+1+pointer_field,1)
 
                     if ((table_id == 0x0)&(PID != 0x0)):
-                        print 'Ooops!, Something wrong in packet No. %d' %packetCount
+                        print('Ooops!, Something wrong in packet No. %d' %packetCount)
 
                     k = n+Adaptation_Field_Length+4+1+pointer_field
 
@@ -440,7 +440,7 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
                                     packetCount += 1
                                 continue
                                 
-                            print 'pasing PAT Packet! packet No. %d, PID = 0x%X' %(packetCount, PID)
+                            print('pasing PAT Packet! packet No. %d, PID = 0x%X' %(packetCount, PID))
                             parsePATSection(filehandle, k)
                             if (psi_mode == 0):
                                 return
@@ -462,7 +462,7 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
                                     n += packet_size
                                     packetCount += 1
                                     continue
-                            print 'pasing PMT Packet! packet No. %d, PID = 0x%X' %(packetCount, PID)
+                            print('pasing PMT Packet! packet No. %d, PID = 0x%X' %(packetCount, PID))
                             parsePMTSection(filehandle, k)
                             if (psi_mode == 0):
                                 return
@@ -480,7 +480,7 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
                                     n += packet_size
                                     packetCount += 1
                                     continue
-                            print 'pasing SIT Packet! packet No. %d, PID = 0x%X' %(packetCount, PID)
+                            print('pasing SIT Packet! packet No. %d, PID = 0x%X' %(packetCount, PID))
                             parseSITSection(filehandle, k)
                             if (psi_mode == 0):
                                 return
@@ -508,20 +508,20 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
                 break
 
     except IOError:
-        print 'IO error! maybe reached EOF'
+        print('IO error! maybe reached EOF')
     else:
         filehandle.close()
 
-    print '================================================\n'
+    print('================================================\n')
     for i in range(len(EntryPESPacketNumList)):
-            print 'TPI = 0x%x, PTS = 0x%x, EntryPESPacketNum = 0x%x' %(TPIList[i], PTSList[i], EntryPESPacketNumList[i])
+            print('TPI = 0x%x, PTS = 0x%x, EntryPESPacketNum = 0x%x' %(TPIList[i], PTSList[i], EntryPESPacketNumList[i]))
 
 
 def getFilename():
-    root=Tkinter.Tk()
+    root=tkinter.Tk()
     fTyp=[('.ts File','*.ts'),('.TOD File','*.TOD'),('.trp File','*.trp'),('All Files','*.*')]
     iDir='~/'
-    filename=tkFileDialog.askopenfilename(filetypes=fTyp,initialdir=iDir)
+    filename=tkinter.filedialog.askopenfilename(filetypes=fTyp,initialdir=iDir)
     root.destroy()
     return filename;
 
@@ -583,7 +583,7 @@ def Main():
     if (filename == ""):
         return
 
-    print filename
+    print(filename)
     filehandle = open(filename,'rb')
 
     parseTSMain(filehandle, opts.packet_size, opts.mode, pid, psi_mode, opts.searchItem)
