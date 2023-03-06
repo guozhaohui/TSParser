@@ -518,11 +518,11 @@ def parseTSMain(filehandle, packet_size, mode, pid, psi_mode, searchItem):
 
 
 def getFilename():
-    root=tkinter.Tk()
+    #root=tkinter.Tk()
     fTyp=[('.ts File','*.ts'),('.TOD File','*.TOD'),('.trp File','*.trp'),('All Files','*.*')]
     iDir='~/'
     filename=tkinter.filedialog.askopenfilename(filetypes=fTyp,initialdir=iDir)
-    root.destroy()
+    #root.destroy()
     return filename;
 
 def Main():
